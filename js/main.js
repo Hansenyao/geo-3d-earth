@@ -27,7 +27,7 @@ glContainer.appendChild(renderer.domElement);
 const geometry = new THREE.SphereGeometry(1, 64, 64);
 
 // 5. Texture
-const texture = new THREE.TextureLoader().load('../img/earth_atmos_2048.jpg');
+const texture = new THREE.TextureLoader().load('/img/earth_atmos_2048.jpg');
 
 // 6. meterial (shader)
 const material = new THREE.MeshStandardMaterial({map: texture});
@@ -47,8 +47,8 @@ light.position.set(5, 3, 5);
 scene.add(light);
 
 // 10. Add geographical point
-const textureNormal = new THREE.TextureLoader().load('../img/marker.png');
-const textureSelected = new THREE.TextureLoader().load('../img/marker-sel.png');
+const textureNormal = new THREE.TextureLoader().load('/img/marker.png');
+const textureSelected = new THREE.TextureLoader().load('/img/marker-sel.png');
 function addPoint(type, name, lat, lon) {
     const offset = 0.02;
     const pos = latLongToVector3(lat, lon, 1);
