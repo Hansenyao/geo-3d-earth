@@ -47,15 +47,16 @@ light.position.set(5, 3, 5);
 scene.add(light);
 
 // 10. Add geographical point
+const textureNormal = new THREE.TextureLoader().load('./img/marker.png');
+const textureSelected = new THREE.TextureLoader().load('./img/marker-sel.png');
 function addPoint(type, name, lat, lon) {
     const offset = 0.02;
     const pos = latLongToVector3(lat, lon, 1);
     const normal = pos.clone().normalize();
     const finalPos = pos.clone().add(normal.multiplyScalar(offset));
 
-    const texture = new THREE.TextureLoader().load('./img/marker.png');
     const material = new THREE.SpriteMaterial({
-        map: texture,
+        map: textureNormal,
         transparent: true
     });
 
@@ -68,7 +69,8 @@ function addPoint(type, name, lat, lon) {
         type: type,
         name: name,
         lat: lat,
-        lon: lon
+        lon: lon,
+        sprite: sprite
     }
     
     //scene.add(sprite);
@@ -79,9 +81,27 @@ cities.forEach((c) => {
     addPoint("city", c.name, c.coords[0], c.coords[1]);
 })
 
-// 11. pick object
+// 11. pick city sprite
+let selectedCity = null;
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+function selectCity(city) {
+    // Revert the previous selected city's status
+    if (selectedCity && selectedCity.sprite) {
+        selectedCity.sprite.material.map = textureNormal;
+        selectedCity.sprite.material.needsUpdate = true;
+    }
+
+    selectedCity = city;
+
+    // Set the new selected city's status
+    if (selectedCity && selectedCity.sprite) {
+        selectedCity.sprite.material.map = textureSelected;
+        selectedCity.sprite.material.needsUpdate = true;
+    }
+
+    updateSelectedCityUI(city.name);
+}
 window.addEventListener('click', (event) => {
     const rect = renderer.domElement.getBoundingClientRect();
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -94,10 +114,7 @@ window.addEventListener('click', (event) => {
     if (intersects.length > 0) {
         const obj = intersects[0].object;
         if (obj.userData && obj.userData.type == "city") {
-            const city = cities.find(c => c.name == obj.userData.name);
-            if (city) {
-                updateSelectedCityUI(city);
-            }
+            selectCity(obj.userData);
         }
     }
 })
@@ -120,12 +137,15 @@ function updateCameraUI() {
 }
 
 // Update the selected city's information
-function updateSelectedCityUI(city) {
-    document.getElementById("city-name").innerText = city.name;
-    document.getElementById("city-coord").innerText =`${city.coords[0]}, ${city.coords[1]}`;
+function updateSelectedCityUI(cityName) {
+    const city = cities.find(c => c.name == cityName);
+    if (city) {
+        document.getElementById("city-name").innerText = city.name;
+        document.getElementById("city-coord").innerText =`${city.coords[0]}, ${city.coords[1]}`;
 
-    document.getElementById("city-weather").innerText = city.weather;
-    document.getElementById("city-temp").innerText = city.temp;
+        document.getElementById("city-weather").innerText = city.weather;
+        document.getElementById("city-temp").innerText = city.temp;
+    }
 }
 
 // Render loop
