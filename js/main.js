@@ -23,7 +23,7 @@ const geometry = new THREE.SphereGeometry(1, 64, 64);
 const texture = new THREE.TextureLoader().load('./img/earth_atmos_2048.jpg');
 
 // 6. meterial (shader)
-const material = new THREE.MeshBasicMaterial({map: texture});
+const material = new THREE.MeshStandardMaterial({map: texture});
 
 // 7. mesh (geometry + material)
 const earth = new THREE.Mesh(geometry, material);
@@ -33,6 +33,12 @@ scene.add(earth);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
+// 9. light
+const light = new THREE.DirectionalLight(0xffffff, 5);
+//const light = new THREE.AmbientLight(0xffffff, 5);
+light.position.set(5, 3, 5);
+scene.add(light);
+
 // Render loop
 function render() {
     requestAnimationFrame(render);
@@ -40,6 +46,7 @@ function render() {
     earth.rotation.y += 0.001;
 
     controls.update();
+
     renderer.render(scene, camera);
 }
 
