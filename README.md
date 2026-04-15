@@ -14,3 +14,25 @@ This reflects my understanding of both practical application development and und
 - Three.js (high-level 3D abstraction)
 - GLSL (shader programming)
 - GeoJSON (geospatial data)
+
+## Dependencies
+
+``` 
+# Initial npm
+npm init -y
+
+# Install Three.js
+npm install three
+
+# Install Vite
+npm install --save-dev vite
+
+```
+## Run
+
+```
+npx vite
+```
+
+
+

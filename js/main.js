@@ -1,4 +1,8 @@
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+
+// output three.js version number
+console.log(THREE.REVISION);
 
 // 1. Scene
 const scene = new THREE.Scene();
@@ -25,12 +29,17 @@ const material = new THREE.MeshBasicMaterial({map: texture});
 const earth = new THREE.Mesh(geometry, material);
 scene.add(earth);
 
+// 8. control
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
 // Render loop
 function render() {
     requestAnimationFrame(render);
 
     earth.rotation.y += 0.001;
 
+    controls.update();
     renderer.render(scene, camera);
 }
 
