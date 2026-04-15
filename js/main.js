@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import { latLongToVector3 } from './math';
+import { color } from 'three/src/nodes/tsl/TSLCore.js';
+import { pingpong } from 'three/src/math/MathUtils.js';
 
 // output three.js version number
 console.log(THREE.REVISION);
@@ -39,11 +42,33 @@ const light = new THREE.DirectionalLight(0xffffff, 5);
 light.position.set(5, 3, 5);
 scene.add(light);
 
+// 10. Add geographical point
+function addPoint(lat, lon) {
+    const pos = latLongToVector3(lat, lon, 1);
+
+    const geometry = new THREE.SphereGeometry(0.02, 8, 8);
+    const material = new THREE.MeshBasicMaterial({ color: 0x88ff00 });
+
+    const point = new THREE.Mesh(geometry, material);
+    point.position.copy(pos);
+
+    //scene.add(point);
+    earth.add(point);  // Add points as children of earth so that they can inherit earth coordinates
+}
+addPoint(49.2827, -123.1207); // Vancouver
+addPoint(53.5461, -113.4938); // Edmonton
+addPoint(51.0447, -114.0719); // Calgary
+addPoint(52.1332, -106.6700); // Saskatoon
+addPoint(43.6532, -79.3832);  // Toronto
+addPoint(45.4215, -75.6972);  // Ottawa
+addPoint(39.9042, 116.4074);  // Beijing
+addPoint(30.2741, 120.1551);  // Hangzhou
+
 // Render loop
 function render() {
     requestAnimationFrame(render);
 
-    earth.rotation.y += 0.001;
+    earth.rotation.y += 0.002;
 
     controls.update();
 
