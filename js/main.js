@@ -16,12 +16,10 @@ document.body.appendChild(renderer.domElement);
 const geometry = new THREE.SphereGeometry(1, 64, 64);
 
 // 5. Texture
-const texture = new THREE.TextureLoader().load(
-    'https://threejs.org/examples/textures/earth_atmos_2048.jpg'
-);
+const texture = new THREE.TextureLoader().load('./img/earth_atmos_2048.jpg');
 
 // 6. meterial (shader)
-const material = new THREE.MeshBasciMaterial({map: texture});
+const material = new THREE.MeshBasicMaterial({map: texture});
 
 // 7. mesh (geometry + material)
 const earth = new THREE.Mesh(geometry, material);
