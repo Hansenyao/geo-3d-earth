@@ -48,24 +48,31 @@ scene.add(light);
 
 // 10. Add geographical point
 function addPoint(type, name, lat, lon) {
+    const offset = 0.02;
     const pos = latLongToVector3(lat, lon, 1);
+    const normal = pos.clone().normalize();
+    const finalPos = pos.clone().add(normal.multiplyScalar(offset));
 
-    const geometry = new THREE.SphereGeometry(0.02, 8, 8);
-    const material = new THREE.MeshBasicMaterial({ color: 0x88ff00 });
+    const texture = new THREE.TextureLoader().load('./img/marker.png');
+    const material = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true
+    });
 
-    const point = new THREE.Mesh(geometry, material);
-    point.position.copy(pos);
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(0.06, 0.06, 0.06);
+    sprite.position.copy(finalPos);
 
     // add object's metadata
-    point.userData = {
+    sprite.userData = {
         type: type,
         name: name,
         lat: lat,
         lon: lon
     }
-
-    //scene.add(point);
-    earth.add(point);  // Add points as children of earth so that they can inherit earth coordinates
+    
+    //scene.add(sprite);
+    earth.add(sprite);  // Add points as children of earth so that they can inherit earth coordinates
 }
 // Add cities on earth
 cities.forEach((c) => {
