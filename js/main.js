@@ -43,7 +43,7 @@ light.position.set(5, 3, 5);
 scene.add(light);
 
 // 10. Add geographical point
-function addPoint(lat, lon) {
+function addPoint(type, name, lat, lon) {
     const pos = latLongToVector3(lat, lon, 1);
 
     const geometry = new THREE.SphereGeometry(0.02, 8, 8);
@@ -52,17 +52,47 @@ function addPoint(lat, lon) {
     const point = new THREE.Mesh(geometry, material);
     point.position.copy(pos);
 
+    // add object's metadata
+    point.userData = {
+        type: type,
+        name: name,
+        lat: lat,
+        lon: lon
+    }
+
     //scene.add(point);
     earth.add(point);  // Add points as children of earth so that they can inherit earth coordinates
 }
-addPoint(49.2827, -123.1207); // Vancouver
-addPoint(53.5461, -113.4938); // Edmonton
-addPoint(51.0447, -114.0719); // Calgary
-addPoint(52.1332, -106.6700); // Saskatoon
-addPoint(43.6532, -79.3832);  // Toronto
-addPoint(45.4215, -75.6972);  // Ottawa
-addPoint(39.9042, 116.4074);  // Beijing
-addPoint(30.2741, 120.1551);  // Hangzhou
+addPoint("city", "Vancouver", 49.2827, -123.1207);
+addPoint("city", "Edmonton", 53.5461, -113.4938);
+addPoint("city", "Calgary", 51.0447, -114.0719);
+addPoint("city", "Saskatoon", 52.1332, -106.6700);
+addPoint("city", "Toronto", 43.6532, -79.3832); 
+addPoint("city", "Ottawa", 45.4215, -75.6972); 
+addPoint("city", "Beijing", 39.9042, 116.4074); 
+addPoint("city", "Hangzhou", 30.2741, 120.1551); 
+
+// 11. pick object
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+window.addEventListener('click', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        if (obj.userData && obj.userData.type == "city") {
+            console.log("City:", obj.userData.name);
+            console.log("Lat:", obj.userData.lat);
+            console.log("Lon:", obj.userData.lon);
+        }
+    }
+})
+
 
 // Render loop
 function render() {
