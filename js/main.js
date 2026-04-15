@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { latLongToVector3 } from './math';
-import { color } from 'three/src/nodes/tsl/TSLCore.js';
-import { pingpong } from 'three/src/math/MathUtils.js';
+import { cities } from './cities';
 
 // output three.js version number
 console.log(THREE.REVISION);
@@ -63,14 +62,10 @@ function addPoint(type, name, lat, lon) {
     //scene.add(point);
     earth.add(point);  // Add points as children of earth so that they can inherit earth coordinates
 }
-addPoint("city", "Vancouver", 49.2827, -123.1207);
-addPoint("city", "Edmonton", 53.5461, -113.4938);
-addPoint("city", "Calgary", 51.0447, -114.0719);
-addPoint("city", "Saskatoon", 52.1332, -106.6700);
-addPoint("city", "Toronto", 43.6532, -79.3832); 
-addPoint("city", "Ottawa", 45.4215, -75.6972); 
-addPoint("city", "Beijing", 39.9042, 116.4074); 
-addPoint("city", "Hangzhou", 30.2741, 120.1551); 
+// Add cities on earth
+cities.forEach((c) => {
+    addPoint("city", c.name, c.coords[0], c.coords[1]);
+})
 
 // 11. pick object
 const raycaster = new THREE.Raycaster();
