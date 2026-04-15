@@ -6,17 +6,24 @@ import { cities } from './cities';
 // output three.js version number
 console.log(THREE.REVISION);
 
+// Get 3D render area size
+const glContainer = document.getElementById('gl-container');
+const sceneWith = glContainer.clientWidth;
+const sceneHeight = glContainer.clientHeight;
+
 // 1. Scene
 const scene = new THREE.Scene();
 
 // 2. Camera（projection + view）
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(45, sceneWith / sceneHeight, 1, 1000);
 camera.position.z = 3;
 
 // 3. Renderer（framebuffer）
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+//renderer.setSize(sceneWith, sceneHeight);
+//document.body.appendChild(renderer.domElement);
+renderer.setSize(sceneWith, sceneHeight);
+glContainer.appendChild(renderer.domElement);
 
 // 4. Create geometry
 const geometry = new THREE.SphereGeometry(1, 64, 64);
@@ -88,6 +95,13 @@ window.addEventListener('click', (event) => {
     }
 })
 
+// Refresh 3D render area size
+window.addEventListener('resize', () => {
+  camera.aspect = container.clientWidth / container.clientHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(container.clientWidth, container.clientHeight);
+});
 
 // Render loop
 function render() {

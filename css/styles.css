@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+#container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 3D render container*/
+#gl-container {
+    width: 75%;
+    height: 100%;
+    background: black;
+}
+
+/* information panel */
+#info-panel {
+    width: 25%;
+    height: 100%;
+    background: #111;
+    color: white;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #00d4ff;
+}
+
+.section {
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.label {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.value {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.highlight {
+    color: #00ff88;
+}

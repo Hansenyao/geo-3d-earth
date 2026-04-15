@@ -1,12 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>3D Earth</title>
+  <meta charset="UTF-8">
+  <title>GeoAI 3D Earth</title>
   <style>
     body { margin: 0; }
   </style>
-</head>
-<body>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- JS -->
   <script type="module" src="./js/main.js"></script>
+</head>
+
+<body>
+  <div id="container">
+
+    <!-- 3D render area -->
+    <div id="gl-container"></div>
+
+    <!-- Information panel area -->
+    <div id="info-panel">
+      <div class="section">
+        <h2>🌍 GeoAI 3D Earth</h2>
+        <div class="value">Interactive geospatial visualization demo</div>
+      </div>
+
+      <div class="section">
+        <h2>🎮 Controls</h2>
+        <div class="value">• Drag: Rotate</div>
+        <div class="value">• Scroll: Zoom</div>
+        <div class="value">• Click: Select city</div>
+      </div>
+
+      <div class="section">
+        <h2>📍 Selected City</h2>
+        <div class="label">Name</div>
+        <div id="city-name" class="value">None</div>
+
+        <div class="label">Coordinates</div>
+        <div id="city-coord" class="value">N/A</div>
+
+        <div class="label">Weather</div>
+        <div id="city-weather" class="value">N/A</div>
+
+        <div class="label">Temperature</div>
+        <div id="city-temp" class="value">N/A</div>
+      </div>
+
+      <div class="section">
+        <h2>📷 Camera</h2>
+
+        <div class="label">Position</div>
+        <div id="cam-pos" class="value">N/A</div>
+
+        <div class="label">Rotation</div>
+        <div id="cam-rot" class="value">N/A</div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
