@@ -103,6 +103,15 @@ window.addEventListener('resize', () => {
   renderer.setSize(container.clientWidth, container.clientHeight);
 });
 
+// Update camera information
+function updateCameraInfo() {
+    document.getElementById("cam-pos").innerText =
+    `${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
+
+    document.getElementById("cam-rot").innerText =
+    `${camera.rotation.x.toFixed(2)}, ${camera.rotation.y.toFixed(2)}, ${camera.rotation.z.toFixed(2)}`;
+}
+
 // Render loop
 function render() {
     requestAnimationFrame(render);
@@ -110,6 +119,8 @@ function render() {
     earth.rotation.y += 0.002;
 
     controls.update();
+
+    updateCameraInfo();
 
     renderer.render(scene, camera);
 }
