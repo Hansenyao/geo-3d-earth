@@ -20,8 +20,6 @@ camera.position.z = 3;
 
 // 3. Renderer（framebuffer）
 const renderer = new THREE.WebGLRenderer();
-//renderer.setSize(sceneWith, sceneHeight);
-//document.body.appendChild(renderer.domElement);
 renderer.setSize(sceneWith, sceneHeight);
 glContainer.appendChild(renderer.domElement);
 
@@ -78,8 +76,9 @@ cities.forEach((c) => {
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 window.addEventListener('click', (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
 
@@ -88,9 +87,10 @@ window.addEventListener('click', (event) => {
     if (intersects.length > 0) {
         const obj = intersects[0].object;
         if (obj.userData && obj.userData.type == "city") {
-            console.log("City:", obj.userData.name);
-            console.log("Lat:", obj.userData.lat);
-            console.log("Lon:", obj.userData.lon);
+            const city = cities.find(c => c.name == obj.userData.name);
+            if (city) {
+                updateSelectedCityUI(city);
+            }
         }
     }
 })
@@ -104,7 +104,7 @@ window.addEventListener('resize', () => {
 });
 
 // Update camera information
-function updateCameraInfo() {
+function updateCameraUI() {
     document.getElementById("cam-pos").innerText =
     `${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}`;
 
@@ -112,15 +112,24 @@ function updateCameraInfo() {
     `${camera.rotation.x.toFixed(2)}, ${camera.rotation.y.toFixed(2)}, ${camera.rotation.z.toFixed(2)}`;
 }
 
+// Update the selected city's information
+function updateSelectedCityUI(city) {
+    document.getElementById("city-name").innerText = city.name;
+    document.getElementById("city-coord").innerText =`${city.coords[0]}, ${city.coords[1]}`;
+
+    document.getElementById("city-weather").innerText = city.weather;
+    document.getElementById("city-temp").innerText = city.temp;
+}
+
 // Render loop
 function render() {
     requestAnimationFrame(render);
 
-    earth.rotation.y += 0.002;
+    earth.rotation.y += 0.001;
 
     controls.update();
 
-    updateCameraInfo();
+    updateCameraUI();
 
     renderer.render(scene, camera);
 }
