@@ -193,6 +193,7 @@ function render() {
   const mat4 = glMatrix.mat4;
   let projection = mat4.create();
   let model = mat4.create();
+  let view = mat4.create();
 
   // Set persective view
   mat4.perspective(
@@ -203,14 +204,25 @@ function render() {
     100
   );
 
+  // Set camera view
+  mat4.lookAt(
+    view,
+    [0, 0, 1], // Camera location
+    [0, 0, 0],
+    [0, 1, 0]
+  );
+
   // transformations
   mat4.identity(model);
   mat4.translate(model, model, [0, 0, -5]);
   mat4.rotateY(model, model, angle);
 
   // Cacluate the final matrix
+  let pv = mat4.create();
+  mat4.multiply(pv, projection, view);
+
   let mvp = mat4.create();
-  mat4.multiply(mvp, projection, model);
+  mat4.multiply(mvp, pv, model);
 
   // Pass the final matrix to GPU
   gl.uniformMatrix4fv(matrixLoc, false, mvp);
