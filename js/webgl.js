@@ -4,8 +4,9 @@
  * Hansen Yao
  * 2026-04-16
  */
+import {vertices, indices, colors} from "./cube.js"
 
-const canvas = document.getElementById("glcanvas");
+const canvas = document.getElementById("gl-canvas");
 const gl = canvas.getContext("webgl");
 
 // Validate WebGL is available or not
@@ -61,72 +62,6 @@ gl.attachShader(program, vs);
 gl.attachShader(program, fs);
 gl.linkProgram(program);
 gl.useProgram(program);
-
-// ===========================
-// 3. Define a Cube Geometry (8 vertices)
-// ===========================
-
-const vertices = new Float32Array([
-  // Front
-  -1, -1,  1,
-   1, -1,  1,
-   1,  1,  1,
-  -1,  1,  1,
-
-  // Back
-  -1, -1, -1,
-   1, -1, -1,
-   1,  1, -1,
-  -1,  1, -1,
-]);
-
-// ===========================
-// 4.1 Define the Index Buffer (EBO) for Cube,
-// each face have 2 triagles. 
-// ===========================
-
-const indices = new Uint16Array([
-  // front
-  0, 1, 2, 0, 2, 3,
-
-  // back
-  4, 5, 6, 4, 6, 7,
-
-  // top
-  3, 2, 6, 3, 6, 7,
-
-  // bottom
-  0, 1, 5, 0, 5, 4,
-
-  // right
-  1, 2, 6, 1, 6, 5,
-
-  // left
-  0, 3, 7, 0, 7, 4
-]);
-
-// ===========================
-// 4.2 Define the color for each face. 
-// ===========================
-const colors = new Float32Array([
-  // front (red)
-  1,0,0, 1,0,0, 1,0,0, 1,0,0,
-
-  // back (green)
-  0,1,0, 0,1,0, 0,1,0, 0,1,0,
-
-  // top (blue)
-  0,0,1, 0,0,1, 0,0,1, 0,0,1,
-
-  // bottom (yellow)
-  1,1,0, 1,1,0, 1,1,0, 1,1,0,
-
-  // right (cyan)
-  0,1,1, 0,1,1, 0,1,1, 0,1,1,
-
-  // left (magenta)
-  1,0,1, 1,0,1, 1,0,1, 1,0,1,
-]);
 
 // ===========================
 // 5 Vertex buffer setup
@@ -222,11 +157,12 @@ let angle = 0;
 
 function render() {
   requestAnimationFrame(render);
-  
+
   angle += 0.01;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.viewport(0, 0, canvas.width, canvas.height);
 
   const aspect = canvas.width / canvas.height;
 
@@ -240,7 +176,7 @@ function render() {
   mat4.perspective(
     projection,
     Math.PI / 4,
-    canvas.width / canvas.height,
+    aspect,
     0.1,
     100
   );

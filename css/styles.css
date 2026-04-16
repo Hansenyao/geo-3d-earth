@@ -5,11 +5,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-canvas {
-    display: block; 
-    margin: auto;
-}
-
 #container {
     display: flex;
     width: 100vw;
@@ -21,6 +16,12 @@ canvas {
     width: 75%;
     height: 100%;
     background: black;
+}
+#gl-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* information panel */
