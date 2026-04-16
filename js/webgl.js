@@ -5,6 +5,7 @@
  * 2026-04-16
  */
 import {vertices, indices, colors} from "./cube.js"
+import { updateFPS } from "./fps.js";
 
 const canvas = document.getElementById("gl-canvas");
 const gl = canvas.getContext("webgl");
@@ -206,6 +207,9 @@ function render() {
 
   // Draw the Cube by EBO
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+  // Update FPS
+  updateFPS();
 }
 
 render();

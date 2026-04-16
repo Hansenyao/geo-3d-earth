@@ -16,6 +16,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { latLongToVector3 } from './math';
 import { cities } from './cities';
+import { updateFPS } from './fps';
 
 // output three.js version number
 console.log(THREE.REVISION);
@@ -173,6 +174,8 @@ function render() {
     updateCameraUI();
 
     renderer.render(scene, camera);
+
+    updateFPS();
 }
 
 render();
