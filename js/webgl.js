@@ -174,7 +174,48 @@ const matrixLoc = gl.getUniformLocation(program, "uMatrix");
 gl.enable(gl.DEPTH_TEST);
 
 // =======================
-// 10. Render loop
+// 10. Control camera
+// =======================
+
+const camera = {
+    radius: 5,
+    theta: 0,
+    phi: Math.PI / 2
+};
+
+let isDragging = false;
+let lastX, lastY;
+
+canvas.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+});
+
+canvas.addEventListener("mouseup", () => {
+    isDragging = false;
+});
+
+canvas.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    let dx = e.clientX - lastX;
+    let dy = e.clientY - lastY;
+
+    camera.theta += dx * 0.005;
+    camera.phi -= dy * 0.005;
+
+    lastX = e.clientX;
+    lastY = e.clientY;
+})
+
+canvas.addEventListener("wheel", (e) => {
+    camera.radius += e.deltaY * 0.01;
+    camera.radius = Math.max(2, Math.min(10, camera.radius));
+});
+
+// =======================
+// 11. Render loop
 // =======================
 
 let angle = 0;
@@ -205,16 +246,16 @@ function render() {
   );
 
   // Set camera view
-  mat4.lookAt(
-    view,
-    [0, 0, 1], // Camera location
-    [0, 0, 0],
-    [0, 1, 0]
-  );
+  let eye = [
+    camera.radius * Math.sin(camera.phi) * Math.cos(camera.theta),
+    camera.radius * Math.cos(camera.phi),
+    camera.radius * Math.sin(camera.phi) * Math.sin(camera.theta)
+  ];
+  mat4.lookAt(view, eye, [0, 0, 0], [0, 1, 0]);
 
   // transformations
   mat4.identity(model);
-  mat4.translate(model, model, [0, 0, -5]);
+  mat4.translate(model, model, [0, 0, 0]);
   mat4.rotateY(model, model, angle);
 
   // Cacluate the final matrix
