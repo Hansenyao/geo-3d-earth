@@ -129,3 +129,58 @@ gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
 // ===========================
 
 const matrixLoc = gl.getUniformLocation(program, "uMatrix");
+
+// ===========================
+// 9. Enable Depth Test, to determined the objects rendering order
+// ===========================
+
+gl.enable(gl.DEPTH_TEST);
+
+
+// =======================
+// 10. Render loop
+// =======================
+
+let angle = 0;
+
+function render() {
+  requestAnimationFrame(render);
+
+  angle += 0.01;
+
+  gl.clearColor(0, 0, 0, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  const aspect = canvas.width / canvas.height;
+
+  // Get transformation matrices from glMatrix
+  const mat4 = glMatrix.mat4;
+  let projection = mat4.create();
+  let model = mat4.create();
+
+  // Set persective view
+  mat4.perspective(
+    projection,
+    Math.PI / 4,
+    canvas.width / canvas.height,
+    0.1,
+    100
+  );
+
+  // transformations
+  mat4.identity(model);
+  mat4.translate(model, model, [0, 0, -5]);
+  mat4.rotateY(model, model, angle);
+
+  // Cacluate the final matrix
+  let mvp = mat4.create();
+  mat4.multiply(mvp, projection, model);
+
+  // Pass the final matrix to GPU
+  gl.uniformMatrix4fv(matrixLoc, false, mvp);
+
+  // Draw the Cube by EBO
+  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+}
+
+render();
