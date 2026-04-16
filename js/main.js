@@ -1,3 +1,17 @@
+/**
+ * Use high-leve API (Three.js) to render an earth, to demonstrate bellow 3D graphic concepts
+ *  1. Scene
+ *  2. Camera
+ *  3. Geometry
+ *  4. Texture/Material
+ *  5. Mesh
+ *  6. Control
+ *  7. Interaction
+ * 
+ * Hansen Yao
+ * 2026-04-15
+ */
+
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import { latLongToVector3 } from './math';

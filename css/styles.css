@@ -1,7 +1,13 @@
 body {
     margin: 0;
+    background: black;
     overflow: hidden;
     font-family: Arial, sans-serif;
+}
+
+canvas {
+    display: block; 
+    margin: auto;
 }
 
 #container {
@@ -52,4 +58,17 @@ h2 {
 
 .highlight {
     color: #00ff88;
+}
+
+.demo-link {
+  color: #4fc3f7;
+  text-decoration: none;
+  display: inline-block;
+  padding: 6px 0;
+  transition: 0.2s;
+}
+
+.demo-link:hover {
+  color: #ffffff;
+  transform: translateX(4px);
 }
