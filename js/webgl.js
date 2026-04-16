@@ -20,9 +20,13 @@ if (!gl) {
 // Vertex shader, render each vertex for WebGL
 const vsSource = `
 attribute vec3 aPosition;
+attribute vec3 aColor;
+
 uniform mat4 uMatrix;
+varying vec3 vColor;
 
 void main() {
+  vColor = aColor;
   gl_Position = uMatrix * vec4(aPosition, 1.0);
 }
 `;
@@ -30,9 +34,10 @@ void main() {
 // Fragment shader, render color for each pixel
 const fsSource = `
 precision mediump float;
+varying vec3 vColor;
 
 void main() {
-  gl_FragColor = vec4(0.2, 0.8, 1.0, 1.0);
+  gl_FragColor = vec4(vColor, 1.0);
 }
 `;
 
@@ -57,7 +62,6 @@ gl.attachShader(program, fs);
 gl.linkProgram(program);
 gl.useProgram(program);
 
-
 // ===========================
 // 3. Define a Cube Geometry (8 vertices)
 // ===========================
@@ -77,7 +81,7 @@ const vertices = new Float32Array([
 ]);
 
 // ===========================
-// 4. Define the Index Buffer (EBO) for Cube,
+// 4.1 Define the Index Buffer (EBO) for Cube,
 // each face have 2 triagles. 
 // ===========================
 
@@ -102,7 +106,30 @@ const indices = new Uint16Array([
 ]);
 
 // ===========================
-// 5. Buffer setup
+// 4.2 Define the color for each face. 
+// ===========================
+const colors = new Float32Array([
+  // front (red)
+  1,0,0, 1,0,0, 1,0,0, 1,0,0,
+
+  // back (green)
+  0,1,0, 0,1,0, 0,1,0, 0,1,0,
+
+  // top (blue)
+  0,0,1, 0,0,1, 0,0,1, 0,0,1,
+
+  // bottom (yellow)
+  1,1,0, 1,1,0, 1,1,0, 1,1,0,
+
+  // right (cyan)
+  0,1,1, 0,1,1, 0,1,1, 0,1,1,
+
+  // left (magenta)
+  1,0,1, 1,0,1, 1,0,1, 1,0,1,
+]);
+
+// ===========================
+// 5 Vertex buffer setup
 // ===========================
 
 // Vertex buffer, create the Vertex Buffer Object (VBO) for vertices
@@ -115,14 +142,24 @@ const ebo = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
-// ===========================
-// 6. Set attribute for vertex (aPosition)
-// Tell GPU how many vectors per vertex, and the data type
-// ===========================
-
+// Set it to attribute aPosition
 const posLoc = gl.getAttribLocation(program, "aPosition");
 gl.enableVertexAttribArray(posLoc);
 gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+
+// ===========================
+// 6. Color buffer setup
+// ===========================
+
+// Vertex color buffer
+const colorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+
+// Set it to attribute aColor
+const colorLoc = gl.getAttribLocation(program, "aColor");
+gl.enableVertexAttribArray(colorLoc);
+gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
 
 // ===========================
 // 7. Get the uniform matrix
@@ -136,7 +173,6 @@ const matrixLoc = gl.getUniformLocation(program, "uMatrix");
 
 gl.enable(gl.DEPTH_TEST);
 
-
 // =======================
 // 10. Render loop
 // =======================
@@ -145,7 +181,7 @@ let angle = 0;
 
 function render() {
   requestAnimationFrame(render);
-
+  
   angle += 0.01;
 
   gl.clearColor(0, 0, 0, 1);
