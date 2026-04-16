@@ -14,7 +14,7 @@ if (!gl) {
 }
 
 // ===========================
-// Use GLSL to create shaders
+// 1. Use GLSL to create shaders
 // ===========================
 
 // Vertex shader, render each vertex for WebGL
@@ -46,3 +46,12 @@ function createShader(gl, type, source) {
 
 const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
 const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+// ===========================
+// 2. Create the GLSL program for WebGL
+// ===========================
+const program = gl.createProgram();
+gl.attachShader(program, vs);
+gl.attachShader(program, fs);
+gl.linkProgram(program);
+gl.useProgram(program);
