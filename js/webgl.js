@@ -50,8 +50,53 @@ const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
 // ===========================
 // 2. Create the GLSL program for WebGL
 // ===========================
+
 const program = gl.createProgram();
 gl.attachShader(program, vs);
 gl.attachShader(program, fs);
 gl.linkProgram(program);
 gl.useProgram(program);
+
+
+// ===========================
+// 3. Define a Cube Geometry (8 vertices)
+// ===========================
+
+const vertices = new Float32Array([
+  // Front
+  -1, -1,  1,
+   1, -1,  1,
+   1,  1,  1,
+  -1,  1,  1,
+
+  // Back
+  -1, -1, -1,
+   1, -1, -1,
+   1,  1, -1,
+  -1,  1, -1,
+]);
+
+// ===========================
+// 4. Define the Index Buffer (EBO) for Cube,
+// each face have 2 triagles. 
+// ===========================
+
+const indices = new Uint16Array([
+  // front
+  0, 1, 2, 0, 2, 3,
+
+  // back
+  4, 5, 6, 4, 6, 7,
+
+  // top
+  3, 2, 6, 3, 6, 7,
+
+  // bottom
+  0, 1, 5, 0, 5, 4,
+
+  // right
+  1, 2, 6, 1, 6, 5,
+
+  // left
+  0, 3, 7, 0, 7, 4
+]);
