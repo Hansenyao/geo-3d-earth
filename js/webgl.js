@@ -114,3 +114,18 @@ gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 const ebo = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+
+// ===========================
+// 6. Set attribute for vertex (aPosition)
+// Tell GPU how many vectors per vertex, and the data type
+// ===========================
+
+const posLoc = gl.getAttribLocation(program, "aPosition");
+gl.enableVertexAttribArray(posLoc);
+gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+
+// ===========================
+// 7. Get the uniform matrix
+// ===========================
+
+const matrixLoc = gl.getUniformLocation(program, "uMatrix");
