@@ -100,3 +100,17 @@ const indices = new Uint16Array([
   // left
   0, 3, 7, 0, 7, 4
 ]);
+
+// ===========================
+// 5. Buffer setup
+// ===========================
+
+// Vertex buffer, create the Vertex Buffer Object (VBO) for vertices
+const vbo = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+// Index buffer, create the Element Buffer Object (EBO) for indices
+const ebo = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
